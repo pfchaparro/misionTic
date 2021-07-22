@@ -15,7 +15,7 @@ public class Person {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        PersonClass person = new PersonClass("123456","Pablo","Chaparro","24","Male");
+        PersonClass person = new PersonClass(123456,"Pablo","Chaparro",24,"Male");
         
         System.out.println(person.getDocument()); 
         System.out.println(person.getName());

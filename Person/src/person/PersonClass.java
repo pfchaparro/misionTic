@@ -10,13 +10,13 @@ package person;
  * @author pablo
  */
 public class PersonClass {
-    private String document;
+    private Integer document;
     private String name;
     private String lastName;    
-    private String age;
+    private Integer age;
     private String gender;
 
-    public PersonClass(String document, String name, String lastName, String age, String gender) {
+    public PersonClass(Integer document, String name, String lastName, Integer age, String gender) {
         this.document = document;
         this.name = name;
         this.lastName = lastName;
@@ -27,14 +27,14 @@ public class PersonClass {
     /**
      * @return the document
      */
-    public String getDocument() {
+    public Integer getDocument() {
         return document;
     }
 
     /**
      * @param document the document to set
      */
-    public void setDocument(String document) {
+    public void setDocument(Integer document) {
         this.document = document;
     }
 
@@ -69,14 +69,14 @@ public class PersonClass {
     /**
      * @return the age
      */
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
     /**
      * @param age the age to set
      */
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
