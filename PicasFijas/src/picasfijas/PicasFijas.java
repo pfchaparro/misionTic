@@ -29,11 +29,9 @@ public class PicasFijas {
         String numero = Juego.generateNumber();
         System.out.println("Numero generado aleatorio: " + numero);
         
-        Integer intentos = 1;
+        Integer intentos = 0, aciertos = 0, coincidencias = 0;
         System.out.println("Que codigo propones?: ");
         String propuesta = in.nextLine();
-        Integer aciertos = 0;
-        Integer coincidencias = 0;
         
         while (true)
         {
