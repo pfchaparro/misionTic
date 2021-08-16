@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import models.Story;
 import java.util.Calendar;
 import java.util.Date;
+import models.GeneralModel;
 
 
 /**
@@ -17,15 +18,14 @@ import java.util.Date;
  * @author pablo
  */
 public class StoryController {
-    /*
-    public ArrayList<Story> getDepartamentoList(){
-        ArrayList<Story> depList;
+ 
+    public ArrayList<Story> getStoryList(){
+        ArrayList<Story> stoList;
         
-        depList = new GeneralModel().getDepartamentoList();
+        stoList = new GeneralModel().getStoryList();
         
-        return depList;
+        return stoList;
     }
-    */
     
     public void deleteStory(Integer id){
         Story sto = (Story) new Story().find(id);

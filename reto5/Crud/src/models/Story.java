@@ -33,7 +33,7 @@ public class Story extends Models {
     
     public Story() {
     }
-    
+    /*
     public Object find(String title, String short_description) {
         Story sto = null;
         
@@ -76,6 +76,53 @@ public class Story extends Models {
         
         return sto;
     }
+    */
+    
+    @Override
+    public Object find(Integer id) {
+        Story sto = null;
+        
+        try(Connection conn = super.conectar()){
+            String query = 
+                    "SELECT sto.id, "
+                    + "sto.user_id, "
+                    + "sto.story_type_id, "
+                    + "sto.title, "
+                    + "sto.short_description, "
+                    + "sto.story, "
+                    + "sto.autor, "
+                    + "sto.timestamp "
+                    + "FROM story sto WHERE sto.id = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            
+            int row_count = 0;
+            while( result.next() ){
+                row_count++;
+                
+                if( row_count > 1)
+                    throw new Exception("Se encontro más de un registro con el id="+id);
+                
+                this.id = result.getInt("id");
+                this.story_type_id = result.getInt("story_type_id");
+                this.title = result.getString("title");
+                this.short_description = result.getString("short_description");
+                this.story = result.getString("story");
+                this.autor = result.getString("autor");
+                this.timestamp = result.getString("timestamp");
+                sto = this;
+            }
+            
+            if( row_count == 0)
+                throw new Exception("No se encontro el registro con el id= "+ id);
+            
+        } catch(Exception e){
+            System.out.println("No se encontro el registro con el id= "+ id);
+        }
+        
+        return sto;
+    }
     
     @Override
     public Integer save() {
@@ -84,25 +131,26 @@ public class Story extends Models {
         try(Connection conn = super.conectar()){
             
             if( this.getId() == null){
-                query = "INSERT INTO story (story_type_id, title, short_description, story, timestamp, autor) " 
+                query = "INSERT INTO story (story_type_id, title, short_description, story, autor, timestamp) " 
                         + "VALUES (?,?,?,?,?,?)";
             } else {
-                query = "UPDATE story set story_type_id = ?,title = ?, short_description = ?, story = ?, autor = ?, last_update = ?" 
+                query = "UPDATE story set story_type_id = ?,title = ?, short_description = ?, story = ?, autor = ?, update = ?" 
                         + " WHERE id = ? ";
             }
 
-            PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            
+            PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);    
             statement.setInt(1, this.getStory_type_id());
             statement.setString(2, this.getTitle());
             statement.setString(3, this.getShort_description());
             statement.setString(4, this.getStory());
             statement.setString(5, this.getAutor());
-            statement.setString(6, this.timestamp); 
-            statement.setString(7, this.update);
             
-            if( this.getId() != null)
-                statement.setInt(9, this.getId());
+            if( this.getId()  == null) {
+               statement.setString(6, this.timestamp);  
+            } else {
+                statement.setString(7, this.update);
+                statement.setInt(8, this.getId());
+            }
             
             int rows = statement.executeUpdate();
             
@@ -210,9 +258,4 @@ public class Story extends Models {
     public void setUpdate(String update) {
         this.update = update;
     } 
-
-    @Override
-    public Object find(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
