@@ -8,6 +8,7 @@ package view;
 import controller.StoryController;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import models.Story;
 
@@ -32,6 +33,12 @@ public class frmStory extends javax.swing.JFrame {
         
         if( story != null && story.getId() != null ){
             this.btnDelete.setVisible( true );
+            
+            this.txtAutor.setText(story.getAutor());
+            this.txtDescription.setText(story.getShort_description());
+            this.txtStory.setText(story.getStory());
+            this.txtStoryType.setText(story.getStory_type_id().toString());
+            this.txtTitle.setText(story.getTitle());
         } else {
             this.btnDelete.setVisible( false );
         }
@@ -179,6 +186,11 @@ public class frmStory extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        storyList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                storyListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(storyList);
 
         newStory.setText("new Story");
@@ -257,11 +269,11 @@ public class frmStory extends javax.swing.JFrame {
         String autor = this.txtAutor.getText();
         String description = this.txtDescription.getText();
         String story = this.txtStory.getText();
-        Integer storyType = Integer.parseInt(this.txtStoryType.getText());;
+        Integer storyType = Integer.parseInt(this.txtStoryType.getText());
         String title = this.txtTitle.getText();
 
         try{
-            stoController.saveStory(storyType, title, description, story, autor);
+            stoController.saveStory(this.story.getId(), storyType, title, description, story, autor);
             JOptionPane.showMessageDialog(this, "Se guardo correctamente.");
             this.cleanInput();
         } catch(Exception e){
@@ -277,7 +289,17 @@ public class frmStory extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         Integer id = this.story.getId();
         this.stoController.deleteStory(id);
+        this.fillStoList();
+        this.btnCleanActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void storyListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_storyListMouseClicked
+        JList target = (JList) evt.getSource();
+        int index = target.locationToIndex(evt.getPoint());
+        this.story = this.globalStoList.get(index);
+        this.showPanelForm();
+        
+    }//GEN-LAST:event_storyListMouseClicked
 
     public void cleanInput() {
         this.txtAutor.setText("");
@@ -285,6 +307,7 @@ public class frmStory extends javax.swing.JFrame {
         this.txtStory.setText("");
         this.txtStoryType.setText("");
         this.txtTitle.setText("");
+        this.fillStoList();
     }
     
     public void fillStoList() {
@@ -293,7 +316,7 @@ public class frmStory extends javax.swing.JFrame {
         
         int count = 0;
         for(Story sto : this.globalStoList){
-            model.add(count, sto.getTitle() + ". " + sto.getAutor() );
+            model.add(count, sto.getId() + " - " + sto.getTitle() + " - " + sto.getShort_description() + " - " + sto.getAutor() );
             count++;
         }
         
@@ -336,9 +359,9 @@ public class frmStory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClean;
-    private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnSave;
+    public javax.swing.JButton btnClean;
+    public javax.swing.JButton btnDelete;
+    public javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -351,10 +374,10 @@ public class frmStory extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton newStory;
     private javax.swing.JList<String> storyList;
-    private javax.swing.JTextField txtAutor;
-    private javax.swing.JTextField txtDescription;
-    private javax.swing.JTextField txtStory;
-    private javax.swing.JTextField txtStoryType;
-    private javax.swing.JTextField txtTitle;
+    public javax.swing.JTextField txtAutor;
+    public javax.swing.JTextField txtDescription;
+    public javax.swing.JTextField txtStory;
+    public javax.swing.JTextField txtStoryType;
+    public javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
 }

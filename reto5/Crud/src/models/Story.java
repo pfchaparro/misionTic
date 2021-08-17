@@ -33,51 +33,7 @@ public class Story extends Models {
     
     public Story() {
     }
-    /*
-    public Object find(String title, String short_description) {
-        Story sto = null;
-        
-        try(Connection conn = super.conectar()){
-            String query = 
-                    "SELECT sto.id, "
-                    + "sto.user_id, "
-                    + "sto.story_type_id, "
-                    + "sto.title, "
-                    + "sto.short_description "
-                    + "sto.story "
-                    + "sto.autor "
-                    + "sto.timestamp "
-                    + "FROM story sto WHERE sto.title LIKE '%?%' OR sto.short_description LIKE '%?%'";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, short_description);
-            ResultSet result = statement.executeQuery();
-            
-            int row_count = 0;
-            while( result.next() ){
-                row_count++;
-                   
-                this.id = result.getInt("id");
-                this.story_type_id = result.getInt("story_type_id");
-                this.title = result.getString("title");
-                this.short_description = result.getString("short_description");
-                this.story = result.getString("story");
-                this.autor = result.getString("autor");
-            //    this.timestamp = result.getDate("timestamp");
-                sto = this;
-            }
-            
-            if( row_count == 0)
-                throw new Exception("No se encontro el registro con el titulo= "+ title + " o descripcion corta = " + short_description +  "en la tabla story");
-            
-        } catch(Exception e){
-            System.out.println("No se encontro el registro con el titulo= "+ title + " o descripcion corta = " + short_description +  "en la tabla story");
-        }
-        
-        return sto;
-    }
-    */
-    
+
     @Override
     public Object find(Integer id) {
         Story sto = null;
@@ -91,7 +47,8 @@ public class Story extends Models {
                     + "sto.short_description, "
                     + "sto.story, "
                     + "sto.autor, "
-                    + "sto.timestamp "
+                    + "sto.timestamp, "
+                    + "sto.date_update "
                     + "FROM story sto WHERE sto.id = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, id);
@@ -134,7 +91,7 @@ public class Story extends Models {
                 query = "INSERT INTO story (story_type_id, title, short_description, story, autor, timestamp) " 
                         + "VALUES (?,?,?,?,?,?)";
             } else {
-                query = "UPDATE story set story_type_id = ?,title = ?, short_description = ?, story = ?, autor = ?, update = ?" 
+                query = "UPDATE story set story_type_id = ?,title = ?, short_description = ?, story = ?, autor = ?, date_update = ? " 
                         + " WHERE id = ? ";
             }
 
@@ -148,10 +105,10 @@ public class Story extends Models {
             if( this.getId()  == null) {
                statement.setString(6, this.timestamp);  
             } else {
-                statement.setString(7, this.update);
-                statement.setInt(8, this.getId());
+                statement.setString(6, this.update);
+                statement.setInt(7, this.getId());
             }
-            
+            System.out.println(statement);
             int rows = statement.executeUpdate();
             
             if( rows > 0){
