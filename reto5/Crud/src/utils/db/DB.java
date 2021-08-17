@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class DB {
     private String driver = "com.mysql.jdbc.Driver";
     private String user = "root";
-    private String password = "*EneA2055!";
+    private String password = "";
     private String url = "jdbc:mysql://localhost:3306/forum?characterEncoding=utf8";
 
     public DB() {
